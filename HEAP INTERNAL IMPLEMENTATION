@@ -1,0 +1,73 @@
+import java.util.*;
+
+class Main {
+    public static void insert(int[] arr, int data, int i) {
+        int parent = (i - 1) / 2;
+        arr[i] = data;
+
+        while (parent >= 0 && arr[i] > arr[parent]) {
+            int temp = arr[i];
+            arr[i] = arr[parent];
+            arr[parent] = temp;
+            i = parent;
+            parent = (i - 1) / 2;
+        }
+    }
+
+    public static int delete(int[] arr, int size) {
+        if (size <= 0) {
+            System.out.println("Heap is empty.");
+            return -1; // or some sentinel value to indicate an empty heap
+        }
+
+        int max = arr[0];
+        arr[0] = arr[size - 1]; // Replace the root with the last element
+        size--;
+
+        int i = 0;
+        while (true) {
+            int leftChild = 2 * i + 1;
+            int rightChild = 2 * i + 2;
+            int largest = i;
+
+            if (leftChild < size && arr[leftChild] > arr[largest]) {
+                largest = leftChild;
+            }
+
+            if (rightChild < size && arr[rightChild] > arr[largest]) {
+                largest = rightChild;
+            }
+
+            if (largest != i) {
+                // Swap arr[i] and arr[largest]
+                int temp = arr[i];
+                arr[i] = arr[largest];
+                arr[largest] = temp;
+                i = largest;
+            } else {
+                break; // Heap property is restored
+            }
+        }
+
+        return max;
+    }
+
+    public static void main(String[] args) {
+        int n;
+        System.out.println("Enter how many elements\n");
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        int[] arr = new int[n];
+        int size = 0;
+        for (int i = 0; i < n; i++) {
+            int data = sc.nextInt();
+            insert(arr, data, i);
+            size++;
+        }
+        System.out.println("Array after inserting " + Arrays.toString(arr));
+        System.out.println("Returning maximum from array\n");
+        for (int i = 0; i < arr.length; i++) {
+            System.out.println(delete(arr, size));
+        }
+    }
+}
